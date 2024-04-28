@@ -1,0 +1,15 @@
+﻿@{
+    var type = IsNext ? "next" : "prev";
+    var targetId = CarouselId ?? Parent?.Id;
+}
+<button class="carousel-control-@type" type="button" data-bs-target="#@targetId" data-bs-slide="@type">
+    <span class="carousel-control-@type-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">@VisuallyHiddenText</span>
+</button>
+
+@code {
+    [Parameter] public string? CarouselId { get; set; }
+    [Parameter] public string? VisuallyHiddenText { get; set; }
+    [Parameter] public bool IsNext { get; set; }
+    [CascadingParameter] private CmsCarousel? Parent { get; set; }
+}

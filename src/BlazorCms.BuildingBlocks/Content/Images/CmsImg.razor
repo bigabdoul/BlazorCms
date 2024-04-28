@@ -1,0 +1,51 @@
+﻿@inherits BlockComponentBase
+
+@{
+    var (hasSource, source) = CoalesceValue(IsNotBlank, Src, Model?.Src, FallbackSrc);
+}
+@if (hasSource)
+{
+    IDictionary<string, object> attrs;
+    var props = Model;
+    if (props != null)
+    {
+        attrs = GetAttributes(
+            ("src", source),
+            ("alt", props.Alt),
+            ("width", props.Width),
+            ("height", props.Height),
+            ("class", props.CssClass.AddClass("img-fluid", Fluid)),
+            ("style", props.Style));
+    }
+    else
+    {
+        attrs = GetAttributes(("src", source, true), ("alt", "Image", true), ("class", "img-fluid", Fluid));
+    }
+    if (LazyLoading)
+    {
+        attrs.Add("loading", "lazy");
+    }
+    var (success, othersrc) = CoalesceValue(IsNotBlank, FallbackSrc, Carousel?.FallbackImageSrc);
+    if (success)
+    {
+        attrs["onerror"] = $"javascript: this.onerror = undefined; this.src='{othersrc}';";
+    }
+    <CmsLightboxLink Options="Lightbox">
+        <img @attributes=@GetAllAttributes(attrs) />
+    </CmsLightboxLink>
+}
+@code {
+    [Parameter] public string? Src { get; set; }
+    [Parameter] public bool Fluid { get; set; } = true;
+    [Parameter] public bool LazyLoading { get; set; } = true;
+    [Parameter] public LightboxOptions? Lightbox { get; set; }
+    [Parameter] public string? FallbackSrc { get; set; }
+    [Parameter] public ImageProperties? Model { get; set; }
+
+    [CascadingParameter] private Components.Carousel.CmsCarousel? Carousel { get; set; }
+
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", "cms-img" },
+    };
+}

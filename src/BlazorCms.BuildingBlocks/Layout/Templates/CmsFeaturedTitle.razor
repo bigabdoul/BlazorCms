@@ -1,0 +1,18 @@
+﻿@inherits BlockComponentBase
+<div class="col mb-5 h-100 cms-featured-title">
+    @if (HasIcon)
+    {
+        <div class="feature @Color.GetBgColor() bg-gradient text-white rounded-3 mb-3">
+            <CmsIconText Icon="Icon" />
+        </div>
+    }
+    @if (HasTitle)
+    {
+        <h2 class="h5">@Title</h2>
+    }
+    @ChildContent
+</div>
+
+@code {
+    [Parameter] public CmsThemeColors? Color { get; set; } = CmsThemeColors.Primary;
+}

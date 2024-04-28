@@ -1,0 +1,23 @@
+﻿@if (Model != null)
+{
+	var s = Model;
+	//var i = s.Image;
+	<a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="@s.Url">
+		@* @if (i != null && BlockComponentBase.IsNotBlank(i.Src))
+		{
+			var attrs = GetAttributes(
+				("src", i.Src),
+				("alt", i.Alt),
+				("width", i.Width > 0 ? $"{i.Width}" : null),
+				("height", i.Height > 0 ? $"{i.Height}" : null)
+			);
+			<img @attributes="attrs" />
+		 *@}
+		<CmsImg Model="s.Image" />
+		@s.Name
+	</a>
+}
+
+@code {
+	[Parameter] public NavbarBrandModel? Model { get; set; }
+}

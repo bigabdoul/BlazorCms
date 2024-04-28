@@ -1,0 +1,25 @@
+﻿@inherits CmsButtonBase
+@if (Visible)
+{
+    <button @attributes=@GetAllAttributes(GetAttributes(("disabled", Loading||Disabled))) type="@Type" @onclick=HandleOnClick>
+        @if (Loading)
+        {
+            if (ShowIcon)
+            {
+                if (LoadingIcon != null)
+                {
+                    @LoadingIcon
+                }
+                else
+                {
+                    <CmsIconText><CmsSpinner InsideButton>@Text</CmsSpinner></CmsIconText>
+                }
+            }
+            @ChildContent
+        }
+        else
+        {
+            <CmsIconText Text="@Text" ChildContent="ChildContent!" Icon="Icon" IconEnd="IconEnd" />
+        }
+    </button>
+}

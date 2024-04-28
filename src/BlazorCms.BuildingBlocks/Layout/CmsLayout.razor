@@ -1,0 +1,82 @@
+﻿@inject NavigationManager Nav
+
+<CascadingValue Value="this">
+    <main class="@(CssClassBuilder.Default("flex-shrink-0").AddClass(Class))">
+        @if (!HideNavigation)
+        {
+            if (NavigationContent != null)
+            {
+                @NavigationContent
+            }
+            else
+            {
+                <CmsTemplateNav />
+            }
+        }
+        @if (IsHeaderVisible && HeaderTemplate != null)
+        {
+            @HeaderTemplate
+        }
+        @ChildContent
+    </main>
+    @if (!HideFooter || FooterTemplate != null)
+    {
+        if (FooterTemplate != null)
+        {
+            @FooterTemplate
+        }
+        else
+        {
+            <CmsTemplateFooter />
+        }
+    }
+</CascadingValue>
+@code {
+    [Parameter] public bool FixedTop { get; set; }
+    [Parameter] public bool? ShowHeader { get; set; }
+    [Parameter] public bool HideNavigation { get; set; }
+    [Parameter] public bool HideFooter { get; set; }
+    [Parameter] public string? SiteName { get; set; }
+    [Parameter] public string? Brand { get; set; }
+    [Parameter] public string? BrandImage { get; set; }
+    [Parameter] public string? BrandImageSmall { get; set; }
+    [Parameter] public string? BrandUri { get; set; } = "/";
+    [Parameter] public string? HeaderTitle { get; set; }
+    [Parameter] public string? HeaderTitleClass { get; set; } = "display-5 fw-bolder text-white mb-4 mb-md-2";
+    [Parameter] public string? HeaderImageRight { get; set; }
+    [Parameter] public string? Class { get; set; }
+
+    [Parameter] public RenderFragment? NavigationContent { get; set; }
+    [Parameter] public RenderFragment? HeaderLeadContent { get; set; }
+    [Parameter] public RenderFragment? HeaderTemplate { get; set; }
+    [Parameter] public RenderFragment? FooterTemplate { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter] public IList<NavMenuItem> MenuItems { get; set; } = [];
+    [Parameter] public IList<NavMenuItem> FooterMenuItems { get; set; } = [];
+
+    [Parameter] public string? NavbarId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the navigation template CSS class.
+    /// </summary>
+    [Parameter] public string? NavbarClass { get; set; }
+
+    /// <summary>
+    /// Gets or sets the navigation template CSS style.
+    /// </summary>
+    [Parameter] public string? NavbarStyle { get; set; }
+    [Parameter] public bool? NavbarFluid { get; set; }
+    [Parameter] public CmsThemeMode? NavbarMode { get; set; }
+    [Parameter] public CmsThemeColors? NavbarColor { get; set; } = CmsThemeColors.Dark;
+    [Parameter] public CmsThemeColors? FooterColor { get; set; } = CmsThemeColors.Dark;
+    [Parameter] public CmsThemeColors? HeaderColor { get; set; } = CmsThemeColors.Dark;
+    [Parameter] public EventCallback<NavMenuItem> OnNavMenuItemClick { get; set; }
+
+    [Parameter] public bool IsAuthenticated { get; set; }
+    [Parameter] public EventCallback<bool> IsAuthenticatedChanged { get; set; }
+
+    protected virtual bool IsHeaderVisible => ShowHeader != null && ShowHeader.Value || !string.IsNullOrWhiteSpace(HeaderTitle);
+
+    //public bool IsHomePage => Nav.Uri.Equals("/");
+}

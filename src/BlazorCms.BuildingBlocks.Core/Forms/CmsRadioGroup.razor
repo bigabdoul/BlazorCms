@@ -1,0 +1,45 @@
+﻿@typeparam TValue
+@inherits BlockComponentBase
+
+<CascadingValue Value="this">
+    @if (GetItems(out var items))
+    {
+        foreach (var item in items)
+        {
+            <CmsRadio Name="@Name" Title="@item.Label" Icon="@item.Icon" TValue="TValue"
+                      Value="item.Value" ValueChanged="NotifyValueChanged" />
+        }
+    }
+    else
+    {
+        @ChildContent
+    }
+</CascadingValue>
+@code {
+    [Parameter] public string Name { get; set; } = default!;
+    [Parameter] public IReadOnlyCollection<CmsRadioItem<TValue>>? Items { get; set; }
+    [Parameter] public TValue? Value { get; set; }
+    [Parameter] public EventCallback<TValue?> ValueChanged { get; set; }
+
+    /// <summary>
+    /// Gets or sets an event callback used to report value changes.
+    /// This property provides an alternative notification means when handlers 
+    /// cannot <see cref="ValueChanged" /> due to data binding such as @bind-Value.
+    /// </summary>
+    [Parameter] public EventCallback<TValue?> NotifyChanged { get; set; }
+
+    
+    public Task NotifyValueChanged(TValue? newValue)
+    {
+        Value = newValue;
+        ValueChanged.InvokeAsync(newValue);
+        NotifyChanged.InvokeAsync(newValue);
+        return Task.CompletedTask;
+    }
+
+    bool GetItems([System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out IReadOnlyCollection<CmsRadioItem<TValue>>? result)
+    {
+        result = Items;
+        return result != null;
+    }
+}

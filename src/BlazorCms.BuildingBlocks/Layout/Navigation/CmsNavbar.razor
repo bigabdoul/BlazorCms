@@ -1,0 +1,22 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@if (Items?.Count > 0)
+{
+	<div class="collapse navbar-collapse" id="@Id">
+		<ul class="navbar-nav ms-auto my-2 my-lg-0">
+			<CmsNavbarItemList Items="Items" Visibility="AuthVisibility.Any"/>
+			<AuthorizeView>
+				<Authorized>
+					<CmsNavbarItemList Items="Items" Visibility="AuthVisibility.Authorized"/>
+				</Authorized>
+				<NotAuthorized>
+					<CmsNavbarItemList Items="Items" Visibility="AuthVisibility.NotAuthorized"/>
+				</NotAuthorized>
+			</AuthorizeView>
+		</ul>
+	</div>
+}
+
+@code {
+	[Parameter] public string? Id { get; set; }
+	[Parameter] public IReadOnlyCollection<NavMenuItem>? Items { get; set; }
+}

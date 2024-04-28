@@ -1,0 +1,64 @@
+﻿@inherits BlockComponentBase
+
+@if (Visible)
+{
+    if (InsideButton)
+    {
+        if (NoSize) sm = true;
+        var attrs = GetAllAttributes(GetAttributes(("class", GetClass()), ("role", "status"), ("aria-hidden", "true")));
+        <span @attributes=attrs></span>
+        <span class="visually-hidden">@VisuallyHiddenText</span>
+        @ChildContent
+    }
+    else
+    {
+        var attrs = GetAllAttributes(GetAttributes(("class", GetClass()), ("role", "status")));
+        if (Center)
+        {
+            <div class="d-flex justify-content-center">
+                <div @attributes=attrs>
+                    <span class="visually-hidden">@VisuallyHiddenText</span>
+                    @ChildContent
+                </div>
+            </div>
+        }
+        else
+        {
+            <div @attributes=attrs>
+                <span class="visually-hidden">@VisuallyHiddenText</span>
+                @ChildContent
+            </div>
+        }
+    }
+}
+
+@code {
+    [Parameter] public bool Visible { get; set; } = true;
+    [Parameter] public bool Grow { get; set; }
+    [Parameter] public bool Center { get; set; }
+    [Parameter] public bool InsideButton { get; set; }
+    [Parameter] public bool? sm { get; set; }
+    [Parameter] public bool? md { get; set; }
+    [Parameter] public bool? lg { get; set; }
+    [Parameter] public bool? xl { get; set; }
+    [Parameter] public bool? xxl { get; set; }
+    [Parameter] public CmsThemeColors Color { get; set; }
+    [Parameter] public string? VisuallyHiddenText { get; set; } = "Loading...";
+
+    public override CssClassBuilder GetClass()
+    {
+        string spinnerType = Grow ? "spinner-grow" : "spinner-border";
+        var colorName = Color.GetColorName(prefix: "text-");
+        return base.GetClass()
+            .AddClass(spinnerType)
+            .AddClass($"{spinnerType}-sm", sm)
+            .AddClass($"{spinnerType}-md", md)
+            .AddClass($"{spinnerType}-lg", lg)
+            .AddClass($"{spinnerType}-xl", xl)
+            .AddClass($"{spinnerType}-xxl", xxl)
+            .AddClass(colorName)
+            ;
+    }
+
+    protected bool NoSize => sm is null && md is null && lg is null && xl is null && xxl is null;
+}

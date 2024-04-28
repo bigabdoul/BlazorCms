@@ -1,0 +1,17 @@
+﻿@if (Parent?.Items?.Count > 0)
+{
+    foreach (var item in Parent.Items)
+    {
+        <li @attributes=@GetAttributes(("class", Parent.ItemClass), ("style", Parent.ItemStyle))>@item</li>
+    }
+}
+@code {
+    [CascadingParameter] private BlockListComponentBase? Parent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Parent is null)
+            throw new InvalidOperationException($"This {nameof(ListItemsRenderer)} " +
+            "component must be inside a {nameof(BlockListComponentBase)}.");
+    }
+}

@@ -1,0 +1,57 @@
+﻿@inherits BlockComponentBase
+
+<!-- Blog preview section-->
+<section class="py-5">
+    <div class="container px-5 my-5">
+        <div class="row gx-5 justify-content-center">
+            <div class="col-lg-8 col-xl-6">
+                <div class="text-center">
+                    <h2 class="fw-bolder">Depuis notre blog</h2>
+                    <p class="lead fw-normal text-muted mb-5">
+                        Le blog propose des contenus mis à jour régulièrement pour vous
+                        tenir au courant des dernières infos STEM.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row gx-5">
+            <div class="col-lg-4 mb-5">
+                <CmsBlogCard Title="Blog post title" BadgeTitle="News"
+                             TopImage="/img/stem/stem-00005-1.jpg"
+                             FooterImage="https://dummyimage.com/40x40/ced4da/6c757d"
+                             FooterTitle="Kelly Rowan"
+                             FooterSubtitle="March 12, 2023 &middot; 6 min read">
+                    <p class="card-text mb-0">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </CmsBlogCard>
+            </div>
+            <div class="col-lg-4 mb-5">
+                <CmsBlogCard Title="Another blog post title" BadgeTitle="Media"
+                             TopImage="/img/stem/stem-00001-4.jpg"
+                             FooterImage="https://dummyimage.com/40x40/ced4da/6c757d"
+                             FooterImageAlt="Josiah Barclay"
+                             FooterTitle="Josiah Barclay"
+                             FooterSubtitle="March 23, 2023 &middot; 4 min read">
+                    <p class="card-text mb-0">This text is a bit longer to illustrate the adaptive height of each card. Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </CmsBlogCard>
+            </div>
+            <div class="col-lg-4 mb-5">
+                <CmsBlogCard Title="Another blog post title" BadgeTitle="Media"
+                             TopImage="/img/stem/stem-00003-1.jpg"
+                             FooterImage="https://dummyimage.com/40x40/ced4da/6c757d"
+                             FooterImageAlt="Evelyn Martinez"
+                             FooterTitle="Evelyn Martinez"
+                             FooterSubtitle="April 2, 2023 &middot; 10 min read">
+                    <p class="card-text mb-0">Some more quick example text to build on the card title and make up the bulk of the card's content.</p>
+                </CmsBlogCard>
+            </div>
+        </div>
+        <!-- Call to action-->
+        <aside class="bg-primary bg-gradient rounded-3 p-4 p-sm-5 mt-5">
+            <CmsCallToActionForm></CmsCallToActionForm>
+        </aside>
+    </div>
+</section>
+
+@code {
+
+}

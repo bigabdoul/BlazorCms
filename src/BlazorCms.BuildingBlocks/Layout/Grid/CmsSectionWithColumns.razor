@@ -1,0 +1,26 @@
+﻿@inherits BlockComponentBase
+
+@if (Count > 0 && 12 % Count == 0)
+{
+    var columns = 12 / Count;
+    var attrs = GetAttributes(("class", "cms-section-with-columns"));
+    <section @attributes=@GetAllAttributes(attrs)>
+        <CmsRow>
+            @for (int i = 0; i < Count; i++)
+            {
+                var index = i;
+                <CmsCol lg="columns">
+                    @if (ColumnContent != null)
+                    {
+                        @ColumnContent(index)
+                    }
+                </CmsCol>
+            }
+        </CmsRow>
+    </section>
+}
+
+@code {
+    [Parameter] public int Count { get; set; }
+    [Parameter] public RenderFragment<int>? ColumnContent { get; set; }
+}

@@ -1,0 +1,32 @@
+﻿@using BlazorCms.BuildingBlocks.Abstractions
+@if (NotFound)
+{
+    <div class="alert alert-danger text-center">
+        <span class="fs-6">Slider "@(Id ?? Name)" not found!</span>
+    </div>
+}
+else
+{
+    <CmsDynamicCarousel Item="carousel" />
+}
+@code {
+    [Parameter, EditorRequired] public ComponentConfiguration<CmsCarousel> Config { get; set; } = default!;
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Name { get; set; }
+    
+    ComponentConfigurationItem<CmsCarousel>? carousel;
+    
+    protected override void OnInitialized()
+    {
+        if (!string.IsNullOrWhiteSpace(Id))
+        {
+            carousel = Config.Components?.FirstOrDefault(c => c.Id == Id);
+        }
+        else if (!string.IsNullOrWhiteSpace(Name))
+        {
+            carousel = Config.Components?.FirstOrDefault(c => string.Equals(c.Name, Name, StringComparison.OrdinalIgnoreCase));
+        }
+    }
+
+    bool NotFound => carousel is null && (!string.IsNullOrWhiteSpace(Id) || !string.IsNullOrWhiteSpace(Name));
+}

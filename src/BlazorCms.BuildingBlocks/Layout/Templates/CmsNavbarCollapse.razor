@@ -1,0 +1,82 @@
+﻿@using BlazorCms.BuildingBlocks.Layout.Navigation
+@inherits BlockComponentBase
+
+@{
+    var (hasId, currentId) = CoalesceValue(IsNotBlank, Id, Parent?.Id);
+    var (hasItems, items) = CoalesceValue(list => list?.Count > 0, MenuItems, Parent?.Layout?.MenuItems, Layout?.MenuItems);
+    var isAuthenticated = Layout?.IsAuthenticated == true;
+    if (hasId && hasItems)
+    {
+        int index = 0;
+        <div class="cms-navbar-collapse collapse navbar-collapse" id="@currentId">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                @foreach (var item in items!)
+                {
+                    if (!IsVisible(item, isAuthenticated))
+                        continue;
+
+                    index++;
+                    if (item.DropdownItems?.Count > 0)
+                    {
+                        string navId = $"navbarDropdown{UniqueId}_{index}";
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" id="@navId" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @item.Text
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="@navId">
+                                @foreach (var subitem in item.DropdownItems)
+                                {
+                                    if (subitem.IsSeparator)
+                                    {
+                                        <li role="separator" class="navbar-divider"></li>
+                                    }
+                                    else
+                                    {
+                                        <li><CmsNavbarItemLink Model="subitem" OnItemClick="HandleItemClick" IsDropdown /></li>
+                                    }
+                                }
+                            </ul>
+                        </li>
+                    }
+                    else if (item.IsSeparator)
+                    {
+                        <li role="separator" class="navbar-divider"></li>
+                    }
+                    else
+                    {
+                        <li class="nav-item"><CmsNavbarItem Model="item" OnItemClick="HandleItemClick" /></li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+}
+@code {
+    [Parameter] public IList<NavMenuItem>? MenuItems { get; set; }
+    [Parameter] public EventCallback<NavMenuItem> OnItemClick { get; set; }
+    [CascadingParameter] private CmsTemplateNav? Parent { get; set; }
+    [CascadingParameter] private CmsLayout? Layout { get; set; }
+
+    Task HandleItemClick(NavMenuItem item)
+    {
+        var (has, callback) = CoalesceValue(cb => true == cb?.HasDelegate,
+            OnItemClick, Parent?.OnItemClick, Parent?.Layout?.OnNavMenuItemClick);
+        return has ? callback!.Value.InvokeAsync(item) : Task.CompletedTask;
+        /*
+        return OnItemClick.HasDelegate
+        ? OnItemClick.InvokeAsync(item)
+        : true == Parent?.OnItemClick.HasDelegate
+            ? Parent.OnItemClick.InvokeAsync(item)
+            : true == Parent?.Layout?.OnNavMenuItemClick.HasDelegate
+                ? Parent.Layout.OnNavMenuItemClick.InvokeAsync(item)
+                : Task.CompletedTask;
+    */
+    }
+
+    bool IsVisible(NavMenuItem item, bool isAuthenticated)
+    {
+        return item.Visibility == AuthVisibility.Any ||
+            isAuthenticated && item.Visibility == AuthVisibility.Authorized ||
+            !isAuthenticated && item.Visibility == AuthVisibility.NotAuthorized;
+    }
+}

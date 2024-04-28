@@ -1,0 +1,48 @@
+﻿@inherits BlockComponentBase
+@typeparam TItem
+
+<table @attributes=GetAllAttributes()>
+    @if (HeaderCellsContent is not null)
+    {
+        <thead>
+            <tr>
+                @HeaderCellsContent
+            </tr>
+        </thead>
+    }
+    <tbody>
+        @if (RowCellsItem != null && Items?.Count() > 0)
+        {
+            foreach (var item in Items)
+            {
+                <tr>
+                    @RowCellsItem(item)
+                </tr>
+            }
+        }
+        else if (RowsContent != null)
+        {
+            @RowsContent
+        }
+    </tbody>
+    @if (FooterCellsContent != null)
+    {
+        <tfoot>
+            <tr>
+                @FooterCellsContent
+            </tr>
+        </tfoot>
+    }
+</table>
+@code {
+    [Parameter] public RenderFragment? HeaderCellsContent { get; set; }
+    [Parameter] public RenderFragment? FooterCellsContent { get; set; }
+    [Parameter] public RenderFragment? RowsContent { get; set; }
+    [Parameter] public RenderFragment<TItem>? RowCellsItem { get; set; }
+    [Parameter] public IEnumerable<TItem>? Items { get; set; }
+
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", "table" }
+    };
+}

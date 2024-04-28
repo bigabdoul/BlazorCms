@@ -1,0 +1,38 @@
+﻿@inherits BlockComponentBase
+
+<h2 class="accordion-header cms-accordion-header" id="@Id">
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+    else if (IsNotBlank(Title))
+    {
+        var collapsed = IsCollapsed;
+        var collapseId = RealCollapseId;
+        var buttonAttrs = GetAttributes
+        (
+            ("class", "accordion-button".AddClass("collapsed", collapsed)),
+            ("type", "button"),
+            ("data-bs-toggle", "collapse"),
+            ("data-bs-target", $"#{collapseId}"),
+            ("aria-expanded", collapsed.ToString().ToLowerInvariant()),
+            ("aria-controls", collapseId)
+        );
+        <button @attributes=buttonAttrs @onclick=OnClick>@Title</button>
+    }
+</h2>
+
+@code {
+    [Parameter] public bool? Collapsed { get; set; }
+    [Parameter] public string? CollapseId { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+    [CascadingParameter] private CmsAccordionItem? Parent { get; set; }
+
+    bool IsCollapsed => Collapsed ?? Parent?.Collapsed ?? true;
+    string? RealCollapseId => CollapseId ?? Parent?.Id;
+
+    protected override void OnInitialized()
+    {
+        Id = GetId("cms-accordion-header-");
+    }
+}

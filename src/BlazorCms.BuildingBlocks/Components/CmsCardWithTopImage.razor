@@ -1,0 +1,58 @@
+﻿@inherits BlockComponentBase
+
+<div @attributes=GetAllAttributes()>
+    @if (IsNotBlank(ImageSrc))
+    {
+        <CmsImg Src="@ImageSrc" Class="card-img-top" alt="@ImageAlt" />
+    }
+    <div class="card-body p-4">
+        <CmsBadge Title="@RealBadgeTitle" Class="@RealBadgeClass" Color="RealBadgeColor" />
+        @if (HasTitle)
+        {
+            if (TitleContent != null)
+            {
+                @TitleContent
+            }
+            else
+            {
+                <a class="text-decoration-none link-dark stretched-link" href="@TitleUrl">
+                    <h5 class="card-title mb-3">@RealTitle</h5>
+                </a>
+            }
+        }
+        @ChildContent
+    </div>
+    @if (FooterContent != null)
+    {
+        <div class="card-footer p-4 pt-0 bg-transparent border-top-0">
+            <div class="d-flex align-items-end justify-content-between">
+                <div class="d-flex align-items-start">
+                    @FooterContent
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter] public string? BadgeTitle { get; set; }
+    [Parameter] public string? BadgeClass { get; set; }
+    [Parameter] public CmsThemeColors? BadgeColor { get; set; }
+    [Parameter] public string? ImageSrc { get; set; }
+    [Parameter] public string? ImageAlt { get; set; }
+    [Parameter] public RenderFragment? FooterContent { get; set; }
+
+    [CascadingParameter] private CmsBlogCard? BlogCard { get; set; }
+
+    protected override IDictionary<string, object>? DefaultAttributes => new Dictionary<string, object>
+    {
+        { "class", "cms-card-with-image-top-image card h-100 shadow border-0" }
+    };
+
+    protected override bool HasTitle => TitleContent != null || BlogCard?.TitleContent != null || IsNotBlank(Title ?? BlogCard?.Title);
+
+    string? RealTitle => Title ?? BlogCard?.Title;
+    string? RealBadgeTitle => BadgeTitle ?? BlogCard?.BadgeTitle;
+    string? RealBadgeClass => BadgeClass ?? BlogCard?.BadgeClass;
+    CmsThemeColors RealBadgeColor => BadgeColor ?? BlogCard?.BadgeColor ?? CmsThemeColors.Primary;
+}

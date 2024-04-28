@@ -1,0 +1,10 @@
+﻿@inherits BlockListComponentBase
+<ul @attributes=GetAllAttributes()>
+    <CascadingValue Value="this">
+        <ListItemsRenderer />
+    </CascadingValue>
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+</ul>

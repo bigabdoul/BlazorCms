@@ -1,0 +1,10 @@
+﻿<li class="nav-item">
+    <a class="nav-link" href="@Item.Url" @onclick=HandleItemClick>@Item.Text</a>
+</li>
+
+@code {
+    [Parameter, EditorRequired] public NavMenuItem Item { get; set; } = default!;
+    [Parameter] public EventCallback<NavMenuItem> OnItemClick { get; set; }
+
+    Task HandleItemClick() => OnItemClick.InvokeAsync(Item);
+}

@@ -1,0 +1,58 @@
+﻿@inherits BlockComponentBase
+
+<CascadingValue Value="this">
+    @if (Options.Vertical)
+    {
+        var tabType = Options.NavStyle.ToString().ToLower();
+        <div class="d-flex align-items-start">
+            @if (!HideHeaders)
+            {
+                <div class="@($"{NavStyle} flex-column me-3")" role="tablist" aria-orientation="vertical">
+                    @foreach (var tab in Pages)
+                    {
+                        var isactive = IsActive(tab);
+                        var classes = "nav-link".AddClass("active", when: isactive);
+                        <button data-bs-toggle="pill" type="button" role="tab" class="@classes" id="v-@tabType-@tab.Id-tab"
+                                data-bs-target="#v-@tabType-@tab.Id" aria-controls="v-@tabType-@tab.Id" aria-selected="@isactive.ToString().ToLower()"
+                                @onclick=@(async() => await ActivateTabAsync(tab))>
+                            @tab.Title
+                        </button>
+                    }
+                </div>
+            }
+            <div @attributes=GetContentAttributes()>
+                @* TabPanels are rendered inside each CmsTab *@
+                @ChildContent
+            </div>
+        </div>
+    }
+    else
+    {
+        if (!HideHeaders)
+        {
+            <ul class="@NavStyle" role="tablist">
+                @foreach (var tab in Pages)
+                {
+                    if (Options.DisableTabChangeNotification)
+                    {
+                        // The OnClick event callback prevents the tabpanels' fade-in animation.
+                        <CmsTabHeader TargetId="@tab.Id" IsActive="IsActive(tab)">
+                            <CmsIconText Icon="@tab.Icon" Text="@tab.Title" />
+                        </CmsTabHeader>
+                    }
+                    else
+                    {
+                        // The OnClick event callback prevents the tabpanels' fade-in animation.
+                        <CmsTabHeader TargetId="@tab.Id" IsActive="IsActive(tab)" OnClick="async () => await ActivateTabAsync(tab)">
+                            <CmsIconText Icon="@tab.Icon" Text="@tab.Title" />
+                        </CmsTabHeader>
+                    }
+                }
+            </ul>
+        }
+        <div @attributes="@GetContentAttributes(TabContentClass)">
+            @* TabPanels are rendered inside each CmsTab *@
+            @ChildContent
+        </div>
+    }
+</CascadingValue>

@@ -1,0 +1,61 @@
+﻿@inherits BlockComponentBase
+
+@if (IsVisible)
+{
+    var attrs = GetAllAttributes(GetAttributes(("class", "cms-icon-text")));
+    <span @attributes=attrs>
+        <div class="d-flex gap-1">
+            @if (ShowIcon)
+            {
+                if (Icon is string s)
+                {
+                    <span class="cms-icon-text-icon pe-1"><i class="@s"></i></span>
+                }
+                else if (Icon != null)
+                {
+                    @Icon
+                }
+            }
+            @if (TitleContent is not null)
+            {
+                <span class="cms-icon-text-title-content">@TitleContent</span>
+            }
+            else if (IsNotBlank(Text))
+            {
+                <span class="cms-icon-text-text">@Text</span>
+            }
+            @if (ShowIcon && ChildContent is null)
+            {
+                if (IconEnd is string s)
+                {
+                    <span class="cms-icon-text-icon-end ps-1"><i class="@s"></i></span>
+                }
+                else if (IconEnd != null)
+                {
+                    @IconEnd
+                }
+            }
+        </div>
+        @if (ChildContent != null)
+        {
+            @ChildContent
+            if (ShowIcon)
+            {
+                if (IconEnd is string s)
+                {
+                    <span class="cms-icon-text-icon-end ps-1"><i class="@s"></i></span>
+                }
+                else if (IconEnd != null)
+                {
+                    @IconEnd
+                }
+            }
+        }
+    </span>
+}
+
+@code {
+    [Parameter] public string? Text { get; set; }
+
+    bool IsVisible => HasIcon || ChildContent != null || IsNotBlank(Text);
+}

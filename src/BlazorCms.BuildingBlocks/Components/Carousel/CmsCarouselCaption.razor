@@ -1,0 +1,16 @@
+﻿<div class="carousel-caption d-none d-md-block">
+	@if (Model != null)
+	{
+		<h5>@Model.HeaderText</h5>
+		<p>@Model.BodyText</p>
+	}
+	else
+	{
+		@ChildContent
+	}
+</div>
+
+@code {
+	[Parameter] public RenderFragment? ChildContent { get; set; }
+	[Parameter] public CarouselCaption? Model { get; set; }
+}

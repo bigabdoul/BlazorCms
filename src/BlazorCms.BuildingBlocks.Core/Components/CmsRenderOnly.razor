@@ -1,0 +1,10 @@
+﻿@inherits BlockComponentBase
+
+@if (If)
+{
+    @ChildContent
+}
+
+@code {
+    [Parameter] public bool If { get; set; }
+}

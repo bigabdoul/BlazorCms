@@ -1,0 +1,89 @@
+﻿@inherits BlockComponentBase
+
+<CascadingValue Value="this">
+    @{
+        string cls = $"carousel cms-carousel slide".AddClass("carousel-fade", Crossfade)
+            .AddClass(Class).AddClass("carousel-dark", Dark);
+        var attrs = GetAttributes
+        (
+            ("id", Id, true),
+            ("class", cls, true),
+            ("data-bs-ride", "carousel", !Ride && Autoplay),
+            ("data-bs-ride", "true", Ride),
+            ("data-bs-keyboard", "false", !Keyboard),
+            ("data-bs-touch", "false", !Touch),
+            ("data-bs-pause", Pause.ToString().ToLowerInvariant(), Pause != CarouselPause.None),
+            ("data-bs-interval", Interval, Interval > 0)
+        );
+    }
+    <div @attributes=@GetAllAttributes(attrs)>
+        @if (_items.Count > 0)
+        {
+            if (Indicators && _items.Count > 1)
+            {
+                <CmsCarouselIndicators Count="_items.Count" CarouselId="@Id" />
+            }
+            <div class="carousel-inner">
+                @for (int index = 0; index < _items.Count; index++)
+                {
+                    <CmsCarouselItem Model="_items[index]" IsActive="index == 0" Lightbox="Lightbox" />
+                }
+            </div>
+            if (Controls && _items.Count > 1)
+            {
+                <CmsCarouselControl VisuallyHiddenText="Previous" IsNext=false />
+                <CmsCarouselControl VisuallyHiddenText="Next" IsNext=true />
+            }
+        }
+        else
+        {
+            @ChildContent
+        }
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public string? DefaultImageStyle { get; set; }
+    [Parameter] public bool Indicators { get; set; }
+    [Parameter] public bool Crossfade { get; set; }
+    [Parameter] public bool Dark { get; set; }
+    [Parameter] public bool Controls { get; set; }
+    [Parameter] public bool Lightbox { get; set; }
+    [Parameter] public bool Touch { get; set; } = true;
+    [Parameter] public bool Keyboard { get; set; } = true;
+    [Parameter] public bool Autoplay { get; set; } = true;
+    [Parameter] public bool Ride { get; set; }
+    [Parameter] public CarouselPause Pause { get; set; }
+    [Parameter] public bool Wrap { get; set; } = true;
+    [Parameter] public bool LazyImageLoading { get; set; }
+
+    [Parameter] public int Interval { get; set; }
+    [Parameter] public IReadOnlyList<CarouselChildItem>? Items { get; set; }
+    [Parameter] public string? FallbackImageSrc { get; set; }
+
+    public bool LazyLoadImage => !Autoplay && LazyImageLoading;
+
+    private IReadOnlyList<CarouselChildItem> _items = [];
+
+    protected override void OnInitialized()
+    {
+        Id = GetId("cms-carousel-");
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (Items?.Count > 0)
+        {
+            if (IsNotBlank(DefaultImageStyle))
+            {
+                // set default image style for items with no style
+                foreach (var item in Items.Where(item => item.Image != null && IsBlank(item.Image.Style)))
+                    item.Image!.Style = DefaultImageStyle;
+            }
+
+            _items = Items;
+        }
+
+        base.OnParametersSet();
+    }
+}

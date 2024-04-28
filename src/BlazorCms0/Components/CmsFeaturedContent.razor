@@ -1,0 +1,38 @@
+﻿@inherits BlockComponentBase
+<!-- Features section-->
+<section class="py-5 cms-featured-content">
+    <div class="container px-5 my-5">
+        <div class="row gx-5">
+            @if (HasTitle)
+            {
+                <div class="col-lg-4 mb-5 mb-lg-0"><h2 class="fw-bolder mb-0">@Title</h2></div>
+            }
+            <div class="col-lg-8">
+                <div class="row gx-5 row-cols-1 row-cols-md-2">
+                    <CmsFeaturedTitle Icon="@("bi bi-collection")" Title="Education STEM">
+                        <CmsPara Class="mb-0">
+                            Compétences en résolution de problèmes, pensée critique, communication,
+                            collaboration et numérique.
+                        </CmsPara>
+                    </CmsFeaturedTitle>
+                    <CmsFeaturedTitle Icon="@("bi bi-building")" Title="STEM pour les enfants">
+                        <CmsPara Class="mb-0">
+                            Les générateurs offrent aux enfants une opportunité fascinante de 
+                            comprendre les principes fondamentaux de la production d’électricité. 
+                        </CmsPara>
+                    </CmsFeaturedTitle>
+                    <CmsFeaturedTitle Icon="@("bi bi-toggles2")" Title="Featured Title 3">
+                        <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
+                    </CmsFeaturedTitle>
+                    <CmsFeaturedTitle Icon="@("bi bi-toggles2")" Title="Featured Title 4">
+                        <p class="mb-0">Paragraph of text beneath the heading to explain the heading. Here is just a bit more text.</p>
+                    </CmsFeaturedTitle>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+
+}

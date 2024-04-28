@@ -1,0 +1,42 @@
+﻿@inherits BlockComponentBase
+
+<CascadingValue Value="this">
+    <div class="cms-blog-card">
+        <CmsCardWithTopImage ImageSrc="@TopImage" ImageAlt="@TopImageAlt">
+            <ChildContent>
+                @if (ChildContent != null)
+                {
+                    <div class="cms-blog-card-content">
+                        @ChildContent
+                    </div>
+                }
+            </ChildContent>
+            <FooterContent>
+                @if (FooterContent != null)
+                {
+                    @FooterContent
+                }
+                else
+                {
+                    <CmsBlogCardFooter />
+                }
+            </FooterContent>
+        </CmsCardWithTopImage>
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public string? BadgeTitle { get; set; }
+    [Parameter] public string? BadgeClass { get; set; }
+    [Parameter] public CmsThemeColors? BadgeColor { get; set; }
+    [Parameter] public string? TopImage { get; set; }
+    [Parameter] public string? TopImageAlt { get; set; }
+    [Parameter] public string? FooterImage { get; set; }// = "https://dummyimage.com/40x40/ced4da/6c757d";
+    [Parameter] public string? FooterImageAlt { get; set; }
+    [Parameter] public string? FooterImageClass { get; set; } = "rounded-circle d-none d-md-block me-3";
+    [Parameter] public string? FooterTitle { get; set; }
+    [Parameter] public string? FooterSubtitle { get; set; }
+    [Parameter] public RenderFragment? FooterContent { get; set; }
+    [Parameter] public RenderFragment? FooterTitleContent { get; set; }
+    [Parameter] public RenderFragment? FooterSubtitleContent { get; set; }
+}

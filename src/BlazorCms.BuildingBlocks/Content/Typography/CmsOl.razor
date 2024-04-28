@@ -1,0 +1,10 @@
+﻿@inherits BlockListComponentBase
+<ol @attributes=GetAllAttributes()>
+    <CascadingValue Value="this">
+        <ListItemsRenderer />
+    </CascadingValue>
+    @if (ChildContent != null)
+    {
+        @ChildContent
+    }
+</ol>

@@ -1,0 +1,22 @@
+﻿@inherits BlockComponentBase
+<button @attributes=@GetAllAttributes(("class", Color.GetColorName("navbar-")))>
+    <span class="navbar-toggler-icon"></span>
+</button>
+@code {
+    [Parameter] public string? TargetId { get; set; }
+    [Parameter] public CmsThemeColors? Color { get; set; }
+    [CascadingParameter] private CmsTemplateNav? Parent { get; set; }
+
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>
+    {
+        { "class", "navbar-toggler" },
+        { "type", "button" },
+        { "data-bs-toggle", "collapse" },
+        { "data-bs-target", $"#{RealTargetId}" },
+        { "aria-controls", RealTargetId! },
+        { "aria-expanded", "false" },
+        { "aria-label", "Toggle navigation" },
+    };
+
+    string? RealTargetId => TargetId ?? Parent?.Id;
+}

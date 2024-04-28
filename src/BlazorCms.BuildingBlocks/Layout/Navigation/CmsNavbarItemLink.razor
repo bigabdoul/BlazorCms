@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Components.Routing
+@using static BlazorCms.BuildingBlocks.BlockComponentBase
+
+@if (Model != null)
+{
+	var item = Model;
+
+	if (item.IsSignOut && SignOutForm != null)
+	{
+		@SignOutForm(item)
+	}
+	else
+	{
+		var image = item.Image;
+		var cls = IsDropdown ? "dropdown-item" : "nav-link";
+		cls += (item.IsDarkTheme ? " text-white" : string.Empty);
+		cls += (item.CenterText ? " text-center" : string.Empty);
+		cls += (!IsDropdown && item.IsActive ? " active" : string.Empty);
+
+		var attrs = IsDropdown
+			? GetAttributes(
+				("class", cls),
+				("href", item.Url),
+				("title", item.Title))
+			: GetAttributes(
+				("href", item.Url),
+				("title", item.Title),
+				("disabled", item.IsDisabled),
+				("tabindex", item.IsDisabled ? "-1" : string.Empty),
+				("aria-disabled", item.IsDisabled ? "true" : string.Empty),
+				("aria-current", item.IsActive ? "page" : string.Empty),
+				("class", cls));
+		<NavLink @attributes="@attrs" Match="NavLinkMatch.All" @onclick="HandleItemClick">
+			@if (image != null)
+			{
+				<CmsImg Model="image" />
+				if (IsNotBlank(item.Text))
+				{
+					<span @attributes="@(GetAttributes(("class", item.CenterText ? "d-block" : null)))">@item.Text</span>
+				}
+			}
+			else
+			{
+				<CmsIconText Icon="@item.Icon" Text="@item.Text" />
+			}
+		</NavLink>
+	}
+}
+
+@code {
+	[Parameter] public NavMenuItem? Model { get; set; }
+	[Parameter] public bool IsDropdown { get; set; }
+	[Parameter] public RenderFragment<NavMenuItem>? SignOutForm { get; set; }
+	[Parameter] public EventCallback<NavMenuItem> OnItemClick { get; set; }
+
+	Task HandleItemClick() => OnItemClick.InvokeAsync(Model);
+}

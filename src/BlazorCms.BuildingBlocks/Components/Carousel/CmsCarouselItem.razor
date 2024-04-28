@@ -1,0 +1,57 @@
+﻿@inherits BlockComponentBase
+
+@{
+    string cls = "carousel-item cms-carousel-item".AddClass("active", IsActive);
+    var interval = Interval ?? Model?.Interval ?? Parent?.Interval;
+    var attrs = GetAttributes(("class", cls, true), ("data-bs-interval", interval, interval > 0));
+}
+<div @attributes=@GetAllAttributes(attrs)>
+    @if (Model != null)
+    {
+        if (Model.HasImage)
+        {
+            CarouselImage image = Model.Image!;
+            var imgStyle = GetAttributes(("style", image.Style));
+            var lazy = Parent?.LazyLoadImage ?? true;
+            if (Lightbox)
+            {
+                LightboxOptions options = new()
+                { 
+                    Src = ImageSrcFull, 
+                    Alt = image.Alt, 
+                    GalleryName = $"carousel-gallery-{Parent?.UniqueId ?? UniqueId}", 
+                    Title = Model.Caption?.HeaderText ?? Model.Caption?.BodyText ?? Title,
+                };
+                <CmsImg Src="@image.Src" Class="d-block w-100" alt="@image.Alt" @attributes="imgStyle" LazyLoading=lazy Lightbox="options" />
+            }
+            else if (IsNotBlank(image.Link))
+            {
+                <a @attributes=@GetAttributes(("href", image.Link), ("target", image.LinkTarget))>
+                    <CmsImg Src="@image.Src" Class="d-block w-100" alt="@image.Alt" @attributes="imgStyle" LazyLoading=lazy />
+                </a>
+            }
+            else
+            {
+                <CmsImg Src="@image.Src" Class="d-block w-100" alt="@image.Alt" @attributes="imgStyle" LazyLoading=lazy />
+            }
+        }
+        if (Model.HasCaption)
+        {
+            <CmsCarouselCaption Model="Model.Caption" />
+        }
+    }
+    else
+    {
+        @ChildContent
+    }
+</div>
+
+@code {
+    [Parameter] public CarouselChildItem? Model { get; set; }
+    [Parameter] public bool IsActive { get; set; }
+    [Parameter] public bool Lightbox { get; set; }
+    [Parameter] public int? Interval { get; set; }
+    [CascadingParameter] private CmsCarousel? Parent { get; set; }
+
+    private string? ImageSrcFull => Model?.Image?.SrcFull ?? Model?.Image?.Src;
+}

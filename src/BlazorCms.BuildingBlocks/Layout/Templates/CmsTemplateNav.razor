@@ -1,0 +1,93 @@
+﻿@using BlazorCms.BuildingBlocks.Content.Web
+@inherits BlockComponentBase
+<!-- Navigation-->
+@{
+    var cls = $"navbar navbar-expand-lg {Mode}"
+        .AddClass(LayoutInternal?.NavbarClass!, LayoutInternal?.NavbarClass != null)
+        //.AddClass("fixed-top", Layout?.FixedTop)
+        .AddClass("container-fluid", Fluid)
+        .AddClass(LayoutInternal?.NavbarColor.GetBgColor()!, LayoutInternal?.NavbarColor != null);
+
+    var items = MenuItems ?? LayoutInternal?.MenuItems;
+    var isfluid = Fluid ?? LayoutInternal?.NavbarFluid;
+    var containerClasses = string.Empty
+        .AddClass("container-fluid", isfluid)
+        .AddClass("container", !(isfluid ?? false))
+        .AddClass("px-lg-5");
+
+    var hasbrandimg = IsNotBlank(LayoutInternal?.BrandImage);
+    var hasbrandMdimg = IsNotBlank(LayoutInternal?.BrandImageSmall);
+}
+
+<CascadingValue Value="this">
+    <div class="@CssClassBuilder.Default("cms-template-nav").AddClass("fixed-top", LayoutInternal?.FixedTop)">
+        @if (TopContent != null)
+        {
+            <CmsDiv class="@TopContentClass">@TopContent</CmsDiv>
+        }
+        <nav @attributes=@GetAllAttributes(("class", cls.Build()), ("style", LayoutInternal?.NavbarStyle), ("id", NavbarId))>
+            <div class="@containerClasses">
+                @if (hasbrandimg || hasbrandMdimg)
+                {
+                    <a @attributes=@GetAttributes(("class", "navbar-brand"), ("href", LayoutInternal?.BrandUri))>
+                        @if (hasbrandimg)
+                        {
+                            var cls1 = hasbrandMdimg ? "d-sm-none d-block" : "";
+                            <CmsImg Src="@LayoutInternal?.BrandImage" Class="@cls1" LazyLoading="false" width="112" alt="@LayoutInternal?.Brand" />
+                        }
+                        @if (hasbrandMdimg)
+                        {
+                            var cls1 = hasbrandimg ? "d-none d-sm-block" : "";
+                            <CmsImg Src="@LayoutInternal?.BrandImageSmall" Class="d-none d-sm-block" LazyLoading="false" width="112" alt="@LayoutInternal?.Brand" />
+                        }
+                    </a>
+                }
+                else if (IsNotBlank(LayoutInternal?.Brand))
+                {
+                    <a @attributes=@GetAttributes(("class", "navbar-brand"), ("href", LayoutInternal?.BrandUri))>
+                        @LayoutInternal?.Brand
+                    </a>
+                }
+                @if (items?.Count > 0)
+                {
+                    if (NavbarTogglerButton != null)
+                    {
+                        @NavbarTogglerButton
+                    }
+                    else
+                    {
+                        <CmsNavbarTogglerButton TargetId="@Id" />
+                    }
+                    <CmsNavbarCollapse Id="@Id" MenuItems="items" />
+                }
+            </div>
+        </nav>
+    </div>
+    <!-- /Navigation-->
+</CascadingValue>
+@code {
+    [Parameter] public bool? Fluid { get; set; }
+    [Parameter] public RenderFragment? NavbarTogglerButton { get; set; }
+    [Parameter] public RenderFragment? TopContent { get; set; }
+    [Parameter] public IList<NavMenuItem>? MenuItems { get; set; }
+    [Parameter] public EventCallback<NavMenuItem> OnItemClick { get; set; }
+
+    /// <summary>
+    /// Defaults to 'top-content'.
+    /// </summary>
+    [Parameter] public string? TopContentClass { get; set; } = "top-content";
+    [CascadingParameter] private CmsLayout? LayoutInternal { get; set; }
+
+    public CmsLayout? Layout => LayoutInternal;
+
+    string NavbarId => LayoutInternal?.NavbarId ?? Id!;
+
+    protected override void OnInitialized()
+    {
+        Id = GetId("cms-template-nav-");
+    }
+
+    string? Mode => LayoutInternal?.NavbarMode == null
+    ? "navbar-" + (LayoutInternal?.NavbarColor.IsDarkColor() == true ? CmsThemeMode.Dark : CmsThemeMode.Light).ToString().ToLower()
+        : LayoutInternal?.NavbarMode switch { CmsThemeMode.None => null, _ => "navbar-" + LayoutInternal?.NavbarMode.Value.ToString().ToLower() };
+}

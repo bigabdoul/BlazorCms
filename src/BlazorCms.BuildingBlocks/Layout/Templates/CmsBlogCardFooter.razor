@@ -1,0 +1,49 @@
+﻿@inherits BlockComponentBase
+
+@if (IsNotBlank(Parent!.FooterImage))
+{
+    @* var attrs = GetAttributes
+    (
+        ("loading", "lazy"),
+        ("class", Parent.FooterImageClass), ("src", Parent.FooterImage), ("alt", Parent.FooterImageAlt)
+    ); *@
+    @* <img @attributes=attrs /> *@
+    <CmsImg Src="@Parent.FooterImage" Class="@Parent.FooterImageClass" alt="@Parent.FooterImageAlt"/>
+}
+@if (HasFooterTitle)
+{
+    <div class="small">
+        @if (Parent.FooterTitleContent != null)
+        {
+            @Parent.FooterTitleContent
+        }
+        else if (IsNotBlank(Parent.FooterTitle))
+        {
+            <div class="fw-bold">@Parent.FooterTitle</div>
+        }
+
+        @if (Parent.FooterSubtitleContent != null)
+        {
+            @Parent.FooterSubtitleContent
+        }
+        else if (IsNotBlank(Parent.FooterSubtitle))
+        {
+            <div class="text-muted">@Parent.FooterSubtitle</div>
+        }
+    </div>
+}
+
+@code {
+    [CascadingParameter] private CmsBlogCard? Parent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        if (Parent is null)
+            throw new InvalidOperationException(
+                $"{nameof(CmsBlogCardFooter)} requires a parent {nameof(CmsBlogCard)} compoent.");
+    }
+
+    bool HasFooterTitle =>
+    Coalesce(content => content != null, Parent!.FooterTitleContent, Parent.FooterSubtitleContent) ||
+        Coalesce(IsNotBlank, Parent.FooterTitle, Parent.FooterSubtitle);
+}

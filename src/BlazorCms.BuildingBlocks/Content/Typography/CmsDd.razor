@@ -1,0 +1,15 @@
+﻿@inherits BlockComponentBase
+<dd @attributes=@GetAllAttributes(Parent?.NoDefaults)>@ChildContent</dd>
+@code {
+    [CascadingParameter] private CmsDl? Parent { get; set; }
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", "col-sm-9" }
+    };
+    protected override void OnInitialized()
+    {
+        if (Parent is null)
+            throw new InvalidOperationException($"{nameof(CmsDd)} must be contained in a {nameof(CmsDl)} component.");
+        base.OnInitialized();
+    }
+}

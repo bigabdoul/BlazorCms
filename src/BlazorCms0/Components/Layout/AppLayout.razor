@@ -1,0 +1,30 @@
+﻿@inherits CmsLayout
+<CmsLayout MenuItems="MyMenuItems" Brand="@Title" HeaderTitle="@HeadTitle"
+           HeaderImageRight="/img/stem/stem-00001-3.jpg"
+           ShowHeader=ShowHeader HideNavigation=HideNavigation>
+    <HeaderLeadContent>@HeaderLeadContent</HeaderLeadContent>
+    <ChildContent>@ChildContent</ChildContent>
+</CmsLayout>
+@code {
+    readonly string Title = "STEM-A Consulting";
+    readonly IList<NavMenuItem> MyMenuItems =
+    [
+        new() { Text = "Accueil", Url = "/" },
+        new() { Text = "A Propos", Url = "/about" },
+        new() { Text = "Contact", Url = "/contact" },
+        //new() { Text = "Tarifs", Url = "/pricing" },
+        new() { Text = "Faq", Url = "/faq" },
+        new()
+        {
+            Text = "Blog", Url = "/blog"
+            // SubItems =
+            // [
+            //     new() { Text = "Accueil Blog", Url = "/blog" },
+            //     new() { Text = "Article de Blog", Url = "/blog-post" },
+            // ]
+        },
+        //new() { Text = "Porte-feuille" },
+    ];
+
+    string? HeadTitle => IsHeaderVisible ? "STEM - Science, Technology, Engineering, Mathematics" : null;
+}

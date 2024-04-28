@@ -1,0 +1,119 @@
+﻿@using BlazorCms.BuildingBlocks.Content.Web
+@inherits BlockComponentBase
+@{
+    var hasImageLeft = IsNotBlank(ImageLeft);
+    var hasImageRight = IsNotBlank(ImageRight);
+    var hasImage = hasImageLeft || hasImageRight;
+    var hasImageAll = hasImageLeft && hasImageRight;
+    var class1 = hasImageAll ? "col-lg-6" : hasImage ? "col-lg-6 col-xl-5 py-lg-5" : "col-12";
+    var class2 = hasImageAll ? "col-lg-6" : hasImage ? "col-lg-6 col-xl-5" : "col-12";
+    var class3 = hasImageAll ? "col-12" : hasImage ? "col-lg-6 col-xl-7" : "col-12";
+    var clsCard = $"card border-0 rounded-3 overflow-hidden".AddClass("shadow", !NoShadow).AddClass("mx-auto", CenterContent);
+    string containerClass = ContainerClass.AddClass("d-flex justify-content-center", CenterContent);
+    string containerStyle = CssStyleBuilder.Empty().AddStyle("flex-direction: column", CenterContent);
+}
+<CascadingValue Value="this">
+    <section @attributes=@GetAllAttributes(("class", SectionClass))>
+        <CmsDiv Class="@containerClass" Style="@containerStyle">
+            @if (HasTitle)
+            {
+                if (TitleContent != null)
+                {
+                    @TitleContent
+                }
+                else
+                {
+                    var classes = "fw-bolder mb-3 mb-sm-4 pb-sm-3".AddClass(TitleClass)
+                        .AddClass("text-center", TitleCenter | CenterContent);
+                    <h1 class="@classes">@Title</h1>
+                }
+            }
+            @if (HasSubtitle)
+            {
+                if (SubtitleContent != null)
+                {
+                    @SubtitleContent
+                }
+                else
+                {
+                    var classes = "fw-bolder mb-4".AddClass(SubtitleClass).AddClass("text-center", SubtitleCenter);
+                    <h3 class="@classes">@Subtitle</h3>
+                }
+            }
+            <div class="@clsCard">
+                <div class="card-body p-0">
+                    <div class="row gx-0">
+                        @if (IsNotBlank(ImageTop))
+                        {
+                            <div class="col-12 cms-section-image-top">
+                                <CmsImg Src="@ImageTop" Style="@ImageTopStyle" alt="@ImageTopAlt" />
+                            </div>
+                        }
+                        @if (hasImageLeft)
+                        {
+                            var attrs = GetAttributes
+                            (
+                                ("class", "bg-featured-blog cms-section-image-left"),
+                                ("style", $"background-image: url('{ImageLeft}'); {ImageLeftStyle}")
+                            );
+                            <div @attributes=@GetAttributes(("class", class2))>
+                                <div @attributes=attrs></div>
+                            </div>
+                        }
+                        @if (!hasImageAll && ChildContent != null)
+                        {
+                            <div @attributes=@GetAttributes(("class", class3))>
+                                <CmsSectionContent>@ChildContent</CmsSectionContent>
+                            </div>
+                        }
+                        @if (hasImageRight)
+                        {
+                            var attrs = GetAttributes
+                            (
+                                ("class", "bg-featured-blog cms-section-image-right"),
+                                ("style", $"background-image: url('{ImageRight}'); {ImageRightStyle}")
+                            );
+                            <div @attributes=@GetAttributes(("class", class2))>
+                                <div @attributes=attrs></div>
+                            </div>
+                        }
+                        @if (hasImageAll)
+                        {
+                            <div @attributes=@GetAttributes(("class", class3))>
+                                <CmsSectionContent>@ChildContent</CmsSectionContent>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </CmsDiv>
+    </section>
+</CascadingValue>
+
+@code {
+    [Parameter] public string? BadgeTitle { get; set; }
+    [Parameter] public string? ContentTitle { get; set; }
+    [Parameter] public string? ArticleTitle { get; set; }
+
+    [Parameter] public string? ImageLeft { get; set; } // = "https://dummyimage.com/700x350/343a40/6c757d";
+    [Parameter] public string? ImageLeftStyle { get; set; }
+    [Parameter] public string? ImageRight { get; set; }
+    [Parameter] public string? ImageRightStyle { get; set; }
+    [Parameter] public string? ImageTop { get; set; }
+    [Parameter] public string? ImageTopStyle { get; set; }
+    [Parameter] public string? ImageTopAlt { get; set; } = "Top Image";
+
+    [Parameter] public string? ReadMoreText { get; set; }
+    [Parameter] public string? ReadMoreUrl { get; set; }
+    [Parameter] public bool NoShadow { get; set; }
+    [Parameter] public bool TitleCenter { get; set; }
+    [Parameter] public bool SubtitleCenter { get; set; }
+    [Parameter] public bool TextCenter { get; set; }
+    [Parameter] public bool CenterContent{ get; set; }
+    [Parameter] public string? ContainerClass { get; set; } = "container-lg";
+    [Parameter] public string? PaddingTop { get; set; } = "pt-4 pt-md-5";
+    [Parameter] public string? PaddingBottom { get; set; } = "pb-4 pb-md-5";
+    [Parameter] public string? PaddingInner { get; set; } = "p-2 p-md-5";
+
+    string SectionClass => $"cms-section {Class} {PaddingTop} {PaddingBottom}".AddClass("text-center", TextCenter | CenterContent).AddClass("shadow-0", NoShadow);
+}

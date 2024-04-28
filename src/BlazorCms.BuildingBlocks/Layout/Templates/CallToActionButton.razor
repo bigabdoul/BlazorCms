@@ -1,0 +1,15 @@
+﻿@inherits BlockComponentBase
+<button class="@GetClass()" @onclick=OnClick>@Text</button>
+
+@code {
+    [Parameter] public string? Text { get; set; }
+    [Parameter] public string? Theme { get; set; } = "primary";
+    [Parameter] public bool Small { get; set; }
+    [Parameter] public EventCallback OnClick { get; set; }
+
+    public override CssClassBuilder GetClass() => base.GetClass()
+        .AddClass($"btn btn-lg")
+        .AddClass("btn-sm", Small)
+        .AddClass($"btn-{Theme}", IsNotBlank(Theme))
+        .AddClass("px-4 me-sm-3");
+}

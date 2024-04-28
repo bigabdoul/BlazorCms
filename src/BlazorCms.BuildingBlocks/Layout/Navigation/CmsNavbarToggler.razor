@@ -1,0 +1,12 @@
+﻿<button class="navbar-toggler d-md-none@(Expanded ? "" : " collapsed")" type="button"
+		data-bs-toggle="collapse" data-bs-target="#@TargetId"
+		aria-controls="@TargetId" aria-expanded="@Expanded.ToString().ToLower()"
+		aria-label="@AriaLabel">
+	<span class="navbar-toggler-icon"></span>
+</button>
+
+@code {
+	[Parameter] public string? TargetId { get; set; }
+	[Parameter] public string? AriaLabel { get; set; }
+	[Parameter] public bool Expanded { get; set; }
+}

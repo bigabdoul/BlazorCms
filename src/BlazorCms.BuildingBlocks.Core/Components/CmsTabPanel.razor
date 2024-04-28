@@ -1,0 +1,19 @@
+﻿@inherits BlockComponentBase
+
+@{
+	var id = GetId();
+	var attrs = GetAllAttributes(GetAttributes
+	(
+		("id", id),
+		("role", "tabpanel"),
+		("class", "tab-pane fade" + (IsActive ? " show active" : "")),
+		("aria-labelledby", $"{id}-tab")
+	));
+}
+<div @attributes="attrs">
+	@ChildContent
+</div>
+
+@code {
+	[Parameter] public bool IsActive { get; set; }
+}

@@ -1,0 +1,46 @@
+﻿@using static BlazorCms.BuildingBlocks.BlockComponentBase
+
+@if (Model != null)
+{
+	var item = Model;
+	var image = item.Image;
+	if (item.HasDropdownItems)
+	{
+		var attrs = GetAttributes(
+			("id", item.Id),
+			("title", item.Title),
+			("href", "#"),
+			("aria-expanded", "false"),
+			("data-bs-toggle", "dropdown")
+		);
+		<a class="nav-link dropdown-toggle" @attributes="attrs" >
+			@if (image != null)
+			{
+				if (IsNotBlank(item.Text))
+				{
+					<span @attributes=@GetAttributes(("class", "d-block", item.CenterText))>@item.Text &nbsp;</span>
+				}
+				<CmsImg Model="image" />
+			}
+			else
+			{
+				<CmsIconText Icon="@item.Icon" Text="@item.Text" />
+			}
+		</a>
+		<ul class="dropdown-menu@(item.DropdownMenuEnd ? " dropdown-menu-end" : "")" aria-labelledby="@item.Id">
+			@foreach(var subitem in item.DropdownItems!)
+			{
+				<li><CmsNavbarItemLink Model="subitem" OnItemClick="OnItemClick" IsDropdown /></li>
+			}
+		</ul>
+	}
+	else
+	{
+		<CmsNavbarItemLink Model="item" OnItemClick="OnItemClick" />
+	}
+}
+
+@code {
+    [Parameter] public NavMenuItem? Model { get; set; }
+	[Parameter] public EventCallback<NavMenuItem> OnItemClick { get; set; }
+}

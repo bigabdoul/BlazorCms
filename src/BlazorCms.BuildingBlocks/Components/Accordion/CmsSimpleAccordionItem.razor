@@ -1,0 +1,35 @@
+﻿@inherits BlockComponentBase
+
+@{
+    var collapseId = $"cms-accordion-collapse-{UniqueId}";
+    var collapseClass = "accordion-collapse cms-accordion-collapse collapse".AddClass("show", Expanded);
+    var collapseAttrs = GetAttributes(("data-bs-parent", $"#{RealParentId}", IsNotBlank(RealParentId)));
+}
+<div class="accordion-item">
+    <h2 class="accordion-header cms-accordion-header" id="@Id">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                aria-expanded="@Expanded.ToString().ToLowerInvariant()" aria-controls="@collapseId" @onclick=OnHeaderClick>
+            @Title
+        </button>
+    </h2>
+    <div id="@collapseId" class="@collapseClass" aria-labelledby="@Id" @attributes=collapseAttrs>
+        <div class="accordion-body">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public bool Expanded { get; set; }
+    [Parameter] public string? ParentId { get; set; }
+    [Parameter] public EventCallback OnHeaderClick { get; set; }
+
+    [CascadingParameter] private CmsAccordion? Parent { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Id = GetId("cms-accordion-header-");
+    }
+
+    string? RealParentId => ParentId ?? Parent?.Id;
+}

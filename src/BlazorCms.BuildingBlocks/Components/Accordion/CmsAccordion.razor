@@ -1,0 +1,57 @@
+﻿@inherits BlockComponentBase
+
+@{
+    var cls = "accordion".AddClass("accordion-flush", Flush);
+}
+<CascadingValue Value="this">
+    <div @attributes=@GetAllAttributes(GetAttributes(("class", cls), ("id", Id)))>
+        @* <CmsAccordionItem>
+            <CmsAccordionHeader Title="Accordion Item #1" />
+            <CmsAccordionCollapse>
+                Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion body.
+            </CmsAccordionCollapse>
+        </CmsAccordionItem>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingTwo">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                    Accordion Item #2
+                </button>
+            </h2>
+            <div id="flush-collapseTwo" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#@Id">
+                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the second item's accordion body. Let's imagine this being filled with some actual content.</div>
+            </div>
+        </div>
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingThree">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                    Accordion Item #3
+                </button>
+            </h2>
+            <div id="flush-collapseThree" class="accordion-collapse collapse" aria-labelledby="flush-headingThree" data-bs-parent="#@Id">
+                <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+            </div>
+        </div> *@
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    /// <summary>
+    /// Add .accordion-flush to remove the default background-color,
+    /// some borders, and some rounded corners to render
+    /// accordions edge-to-edge with their parent container.
+    /// </summary>
+    [Parameter] public bool Flush { get; set; }
+
+    /// <summary>
+    /// Omit the data-bs-parent attribute on each .accordion-collapse
+    /// to make accordion items stay open when another item is opened.
+    /// </summary>
+    [Parameter] public bool AlwaysOpen { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Id = GetId("cms-accordion-");
+    }
+}

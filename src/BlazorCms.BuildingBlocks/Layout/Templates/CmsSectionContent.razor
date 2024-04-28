@@ -1,0 +1,34 @@
+﻿@inherits BlockComponentBase
+
+<div @attributes=@GetAllAttributes(("class", Parent.PaddingInner))>
+    @if (IsNotBlank(Parent.BadgeTitle))
+    {
+        <div class="badge bg-primary bg-gradient rounded-pill mb-2">@Parent.BadgeTitle</div>
+    }
+    @if (IsNotBlank(Parent.ArticleTitle))
+    {
+        <div class="h2 fw-bolder">@Parent.ArticleTitle</div>
+    }
+    @if (Coalesce(content => content != null, ChildContent, Parent.ChildContent))
+    {
+        @* <div class="my-3">
+        </div> *@
+        @(ChildContent ?? Parent.ChildContent)
+    }
+    @if (IsNotBlank(Parent.ReadMoreUrl))
+    {
+        <a class="stretched-link text-decoration-none" href="@Parent.ReadMoreUrl">
+            @Parent.ReadMoreText
+            <i class="bi bi-arrow-right"></i>
+        </a>
+    }
+</div>
+
+@code {
+    [CascadingParameter] private CmsSection Parent { get; set; } = default!;
+
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>
+    {
+        { "class", "cms-section-content" }
+    };
+}

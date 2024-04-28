@@ -1,0 +1,58 @@
+﻿@inherits BlockComponentBase
+
+@if (Data?.Length > 0)
+{
+    <div class="realtime-chart">
+        <div id="@ChartId"></div>
+
+        @if (ShowMetadata)
+        {
+            <div class="small text-muted px-4">
+                <span>Chart Type: @Curve.ToString() @Type.ToString()</span>
+            </div>
+        }
+        @if (SelectCurves?.Count > 0 || SelectTypes?.Count > 0)
+        {
+            var curveId = $"shuffleCurve-{ChartId}";
+            var typeId = $"shuffleType-{ChartId}";
+            <div class="input-group px-4 py-2 realtime-chart-select">
+                @if (SelectCurves?.Count > 0)
+                {
+                    <select class="form-control" title="Curve" @bind=Curve>
+                        @foreach (var item in SelectCurves)
+                        {
+                            var attrs = GetAttributes(("value", item), ("selected", item == Curve));
+                            <option @attributes=attrs>@item.ToString()</option>
+                        }
+                    </select>
+                }
+                @if (SelectTypes?.Count > 0)
+                {
+                    <select class="form-control" title="Type" @bind=Type>
+                        @foreach (var item in SelectTypes)
+                        {
+                            var attrs = GetAttributes(("value", item), ("selected", item == Type));
+                            <option @attributes=attrs>@item.ToString()</option>
+                        }
+                    </select>
+                }
+                <button type="button" class="btn btn-sm btn-secondary" title="@RefreshButtonTitle" @onclick=RenderAsync>
+                    <i class="@RefreshButtonIcon"></i>&nbsp;@RefreshButtonText
+                </button>
+            </div>
+            <div class="input-group px-4 realtime-chart-shuffle">
+                <CmsCheckbox Button ButtonSmall @bind-Checked=ShuffleCurve Title="@ShuffleCurveText" />
+                <CmsCheckbox Button ButtonSmall @bind-Checked=ShuffleType Title="@ShuffleTypeText" />
+                <label class="small input-group-text py-0" title="Last shuffled">@lastShuffled</label>
+            </div>
+        }
+    </div>
+}
+else if (NoDataContent != null)
+{
+    @NoDataContent
+}
+else if (IsNotBlank(NoData))
+{
+    <h6 class="text-danger realtime-chart-no-data">@NoData</h6>
+}

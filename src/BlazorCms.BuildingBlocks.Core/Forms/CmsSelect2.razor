@@ -1,0 +1,30 @@
+﻿@typeparam TItem
+@typeparam TValue
+@inherits CmsSelect2Base<TItem, TValue>
+
+<CmsSelect TItem="TItem" TValue="TValue"
+           Title="@Title"
+           TitleContent=TitleContent!
+           TitleUrl="@TitleUrl"
+           Size="Size"
+           Multiple=Multiple
+           ListItems="ListItems"
+           ChildContent=ChildContent!
+           Converter=Converter!
+           ValueGetter=ValueGetter!
+           TextGetter=TextGetter!
+           Class="@Class"
+           Style="@Style"
+           Icon="@Icon"
+           Id="@GetId()"
+           ItemClass="@ItemClass"
+           Items=Items
+           ItemStyle="@ItemStyle"
+           NoDefaults=NoDefaults
+           Subtitle="@Subtitle"
+           SubtitleContent=SubtitleContent!
+           AdditionalAttributes=AdditionalAttributes
+           Value=Value
+           ValueChanged=ValueChanged
+           SelectedValues=SelectedValues
+           SelectedValuesChanged=SelectedValuesChanged />

@@ -1,0 +1,11 @@
+﻿@inherits BreakpointBlockComponentBase
+<div @attributes=GetAllAttributes()>
+    @ChildContent
+</div>
+@code {
+    [Parameter] public bool Fluid { get; set; }
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", GetBreakpoints("container", suffixWhenNone: Fluid ? "-fluid" : string.Empty) }
+    };
+}

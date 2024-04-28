@@ -1,0 +1,11 @@
+﻿@inherits BlockComponentBase
+
+@if (HasTitle)
+{
+    var classes = GetClass().AddClass($"badge {Color.GetBgColor()} bg-gradient rounded-pill mb-2");
+    <div class="@classes">@Title</div>
+}
+
+@code {
+    [Parameter] public CmsThemeColors Color { get; set; } = CmsThemeColors.Primary;
+}

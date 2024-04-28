@@ -1,0 +1,10 @@
+﻿@using BlazorCms.BuildingBlocks.Abstractions
+@if (IsVisible)
+{
+    var prms = Item!.Component!.GetParameters();
+    <DynamicComponent Type="typeof(CmsCarousel)" Parameters="prms" />
+}
+@code {
+    [Parameter] public ComponentConfigurationItem<CmsCarousel>? Item { get; set; }
+    bool IsVisible => Item != null && !Item.Disabled && Item.Component?.Items?.Count > 0;
+}

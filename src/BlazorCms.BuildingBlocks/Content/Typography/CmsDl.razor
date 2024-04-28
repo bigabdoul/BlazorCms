@@ -1,0 +1,12 @@
+﻿@inherits BlockListComponentBase
+<dl @attributes=GetAllAttributes()>
+    <CascadingValue Value="this">
+        @ChildContent
+    </CascadingValue>
+</dl>
+@code {
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", "row" }
+    };
+}

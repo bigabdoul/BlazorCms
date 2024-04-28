@@ -1,0 +1,19 @@
+﻿@if (!string.IsNullOrWhiteSpace(Options?.Src))
+{
+    var attrs2 = GetAttributes
+    (
+        ("href", Options.Src),
+        ("data-Lightbox", Options.GalleryName),
+        ("data-alt", Options.Alt),
+        ("data-title", Options.Title)
+    );
+    <a @attributes=attrs2>@ChildContent</a>
+}
+else
+{
+    @ChildContent
+}
+@code {
+    [Parameter] public LightboxOptions? Options { get; set; }
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+}

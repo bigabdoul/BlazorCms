@@ -1,0 +1,33 @@
+﻿@inherits BlockComponentBase
+
+<CascadingValue Value="this">
+    <div class="accordion-item cms-accordion-item" id="@Id">
+        @ChildContent
+    </div>
+</CascadingValue>
+
+@code {
+    [Parameter] public string? ParentId { get; set; }
+    [Parameter] public string? HeaderId { get; set; }
+    [Parameter] public bool Collapsed { get; set; } = true;
+    [CascadingParameter] private CmsAccordion Parent { get; set; } = default!;
+
+    /// <summary>
+    /// Gets the real parent identifier.
+    /// </summary>
+    /// <remarks>
+    /// Omit the data-bs-parent attribute on each .accordion-collapse
+    /// to make accordion items stay open when another item is opened.
+    /// </remarks>
+    protected internal string? RealParentId => CoalesceValue(IsNotBlank, ParentId, Parent?.AlwaysOpen == true ? null : Parent?.Id).Value;
+
+    protected override void OnInitialized()
+    {
+        if (Parent is null)
+            throw new InvalidOperationException(
+                $"The {nameof(CmsAccordionItem)} component must be inside a {nameof(CmsAccordion)} component.");
+
+        Id = GetId("cms-accordion-item-");
+        HeaderId ??= $"cms-accordion-header-{UniqueId}";
+    }
+}

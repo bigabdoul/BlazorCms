@@ -1,0 +1,56 @@
+﻿@inherits BlockComponentBase
+@{
+    var title = GetTitle();
+    var leadText = GetLeadText();
+    var imageRight = GetImageRight();
+    var hasBgImg = IsNotBlank(BackgroundImage);
+
+    var cls = "cms-template-header py-5".AddClass("bg-header", hasBgImg)
+        .AddClass(Layout?.HeaderColor.GetBgColor(), Layout?.HeaderColor != null);
+}
+<header @attributes=@GetAllAttributes(GetAttributes(("class", cls), ("style", GetStyle)))>
+    <div class="container px-lg-5">
+        <div class="row gx-5 align-items-center justify-content-center">
+            <div class="col">
+                <div class="my-lg-5 text-center text-xl-start">
+                    @if (IsNotBlank(title))
+                    {
+                        <CmsH1 class="@Layout?.HeaderTitleClass">@title</CmsH1>
+                    }
+                    @if (leadText != null)
+                    {
+                        <div class="lead fw-normal mb-4">@leadText</div>
+                    }
+                    @if (CallToAction != null)
+                    {
+                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xl-start">
+                            @CallToAction
+                        </div>
+                    }
+                </div>
+            </div>
+            @if (IsNotBlank(imageRight))
+            {
+                <div class="col-xl-5 col-xxl-6 d-none d-xl-block text-center">
+                    <CmsImg Class="img-fluid rounded-3 my-5" Src="@imageRight" alt="Image" />
+                </div>
+            }
+        </div>
+    </div>
+</header>
+
+@code {
+    [Parameter] public string? BackgroundImage { get; set; }
+    [Parameter] public string? ImageRight { get; set; } // = "https://dummyimage.com/600x400/343a40/6c757d";
+    [Parameter] public RenderFragment? LeadContent { get; set; }
+    [Parameter] public RenderFragment? CallToAction { get; set; }
+
+    [CascadingParameter] private CmsLayout? Layout { get; set; }
+
+    string? GetTitle() => Coalesce(Title, Layout?.HeaderTitle);
+    string? GetImageRight() => Coalesce(ImageRight, Layout?.HeaderImageRight);
+    RenderFragment? GetLeadText() => Coalesce(LeadContent, Layout?.HeaderLeadContent);
+    string? GetStyle => IsNotBlank(BackgroundImage) 
+        ? $"background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url('{BackgroundImage}');" 
+        : null;
+}

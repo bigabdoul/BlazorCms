@@ -1,0 +1,78 @@
+﻿@inherits BlockComponentBase
+
+@{
+    var id = GetId("cms-checkbox-");
+}
+@if (Button)
+{
+    var color = ButtonColor.GetColorName();
+    var classes = "btn"
+        .AddClass("btn-sm", ButtonSmall)
+        .AddClass($"btn-{color}", !ButtonOutline)
+        .AddClass($"btn-outline-{color}", ButtonOutline);
+    var attrs = GetAttributes
+    (
+        ("id", id),
+        ("type", "checkbox"),
+        ("autocomplete", "off"),
+        ("class", "btn-check"),
+        ("checked", Checked),
+        ("disabled", Disabled)
+    );
+    <div class="cms-checkbox-button">
+        <input @attributes=attrs @onchange=HandleChanged>
+        <CmsRenderOnly If=!NoLabel>
+            <label class="@classes" for="@id">
+                <CmsIconText Icon="@Icon" Text="@Title" />
+            </label>
+        </CmsRenderOnly>
+    </div>
+}
+else
+{
+    var classes = "form-check cms-checkbox".AddClass("form-check-inline", Inline).AddClass("form-switch", Switch);
+    var attrs = GetAttributes
+    (
+        ("id", id),
+        ("type", "checkbox"),
+        ("class", "form-check-input"),
+        ("checked", Checked),
+        ("disabled", Disabled)
+    );
+    <div class="@classes">
+        <input @attributes=attrs @onchange=HandleChanged>
+        <CmsRenderOnly If=!NoLabel>
+            <label class="form-check-label" for="@id">
+                <CmsIconText Icon="@Icon" Text="@Title" />
+            </label>
+        </CmsRenderOnly>
+    </div>
+}
+
+@code {
+    /// <summary>
+    /// Whether to use a switch-like checkbox instead of a traditional checkbox.
+    /// This property and the <see cref="Button" /> property are mutually exclusive.
+    /// </summary>
+    [Parameter] public bool Switch { get; set; }
+    [Parameter] public bool Inline { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public bool NoLabel { get; set; }
+    [Parameter] public bool Checked { get; set; }
+    [Parameter] public EventCallback<bool> CheckedChanged { get; set; }
+
+    /// <summary>
+    /// Whether to use a button-like checkbox instead of a traditional checkbox.
+    /// This property and the <see cref="Switch" /> property are mutually exclusive.
+    /// </summary>
+    [Parameter] public bool Button { get; set; }
+
+    /// <summary>
+    /// Whether to render a small button. Applies when <see cref="Button"/> is <see langword="true"/>.
+    /// </summary>
+    [Parameter] public bool ButtonSmall { get; set; }
+    [Parameter] public bool ButtonOutline { get; set; } = true;
+    [Parameter] public CmsThemeColors ButtonColor { get; set; } = CmsThemeColors.Primary;
+
+    void HandleChanged(ChangeEventArgs e) => CheckedChanged.InvokeAsync(Checked = (bool)e.Value!);
+}

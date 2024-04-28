@@ -1,0 +1,25 @@
+﻿@if (Count > 0)
+{
+    var targetId = CarouselId ?? Parent?.Id;
+    <div class="carousel-indicators cms-carousel-indicators">
+        @for (int index = 0; index < Count; index++)
+        {
+            var attrs2 = GetAttributes
+            (
+                ("type", "button", true),
+                ("data-bs-target", $"#{targetId}", BlockComponentBase.IsNotBlank(targetId)),
+                ("data-bs-slide-to", index, true),
+                ("aria-label", $"Slide {index + 1}", true),
+                ("class", "active", index == 0),
+                ("aria-current", "true", index == 0)
+            );
+            <button @attributes="attrs2"></button>
+        }
+    </div>
+}
+
+@code {
+    [Parameter] public int Count { get; set; }
+    [Parameter] public string? CarouselId { get; set; }
+    [CascadingParameter] private CmsCarousel? Parent { get; set; }
+}

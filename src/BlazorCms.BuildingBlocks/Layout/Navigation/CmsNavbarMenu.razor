@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@{
+	var s = Options;
+	<CascadingAuthenticationState>
+		<nav class="navbar navbar-expand-lg navbar-light fixed-top py-3" id="@s.MenuId">
+			<div class="container-fluid">
+				<CmsNavbarBrand Model="s.Brand"/>
+				<CmsNavbarToggler TargetId="@s.CollapseId" AriaLabel="@s.TogglerLabel" />
+				<CmsNavbar Id="@s.CollapseId" Items="s.NavbarItems" />
+			</div>
+		</nav>
+	</CascadingAuthenticationState>
+}
+
+@code {
+	[Parameter] public NavbarOptions Options { get; set; } = new();
+}

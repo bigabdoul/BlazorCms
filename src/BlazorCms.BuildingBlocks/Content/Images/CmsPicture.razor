@@ -1,0 +1,20 @@
+﻿@inherits BlockComponentBase
+
+<picture>
+    @if (Sources?.Count > 0)
+    {
+        foreach (var source in Sources)
+        {
+            @* <source media="(min-width: 650px)" srcset="file-medium.jpg" /> *@
+            <source @attributes=@GetAttributes(("media", source.Media), ("srcset", source.Srcset)) />
+        }
+    }
+    @*@attributes=@GetAttributes(("src", Src), ("alt", Alt)) *@
+    <CmsImg Src="@Src" alt="@Alt" />
+</picture>
+
+@code {
+    [Parameter] public string Src { get; set; } = default!;
+    [Parameter] public string? Alt { get; set; }
+    [Parameter] public IReadOnlyCollection<CmsPictureSource>? Sources { get; set; }
+}

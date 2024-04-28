@@ -1,0 +1,98 @@
+﻿@page "/blog/{Category}/{Id}/{Slug}"
+@inherits BlogPostBase
+
+<PageTitle>@Title</PageTitle>
+
+<!-- Page Content-->
+<section class="py-5">
+    <div class="container px-5 my-5">
+        <div class="row gx-5">
+            <div class="col-lg-3">
+                <div class="d-flex align-items-center mt-lg-5 mb-4">
+                    <img class="img-fluid rounded-circle" src="/img/stem/about-1.jpg" alt="..." />
+                    <div class="ms-3">
+                        <div class="fw-bold">Mouhidine Kaba</div>
+                        <div class="text-muted">STEM, News, Education</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <!-- Post content-->
+                <article>
+                    <!-- Post header-->
+                    <header class="mb-4">
+                        <!-- Post title-->
+                        <h1 class="fw-bolder mb-1">Appareils Electroniques</h1>
+                        <!-- Post meta content-->
+                        <div class="text-muted fst-italic mb-2">5 janvier 2024</div>
+                        <!-- Post categories-->
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Ingénierie électrique</a>
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Science</a>
+                    </header>
+                    <!-- Preview image figure-->
+                    <figure class="mb-4"><img class="img-fluid rounded" src="/img/stem/stem-00001.jpg" alt="..." /></figure>
+                    <!-- Post content-->
+                    <section class="mb-5">
+                        <p class="fs-5 mb-4">Dans le domaine des appareils électroniques, les enfants peuvent se plonger dans les circuits en construisant de simples radios ou en construisant leurs propres lampes de poche LED à partir de zéro, leur permettant ainsi d'acquérir une connaissance pratique des principes de l'ingénierie électrique. L'exploration des appareils électriques peut être une expérience d'apprentissage interactive pour les enfants ; ils peuvent comprendre le fonctionnement interne d'un grille-pain en le démontant et en le remontant, acquérant ainsi un aperçu des éléments chauffants et des mécanismes de sécurité.</p>
+                        <p class="fs-5 mb-4">Les générateurs offrent aux enfants une opportunité fascinante de comprendre les principes fondamentaux de la production d’électricité. Ils peuvent construire de simples générateurs à manivelle pour alimenter de petites ampoules LED, illustrant ainsi les concepts de conversion d'énergie et d'énergie renouvelable. La fusion du minerai de fer présente un voyage captivant dans la métallurgie pour les jeunes esprits.</p>
+                        <p class="fs-5 mb-4">En fabriquant des fours miniatures avec de l'argile et du charbon de bois, les enfants peuvent simuler le processus d'extraction du fer du minerai, favorisant ainsi l'appréciation de la science des matériaux et des processus industriels. Les enfants africains possèdent un immense potentiel pour exceller dans ces domaines, faisant preuve d’ingéniosité et de créativité.</p>
+                        <p class="fs-5 mb-4">Ayant accès à des matériaux de base comme le carton, le bois et les restes de métal, ils peuvent fabriquer des outils pédagogiques tels que des modèles de circuits électroniques ou des générateurs rudimentaires, faisant ainsi preuve d’ingéniosité et d’innovation.</p>
+                        <p class="fs-5 mb-4">La collaboration avec des artisans qualifiés, notamment des potiers, des sculpteurs et des forgerons, offre une riche palette d'opportunités d'apprentissage. Les enfants peuvent devenir apprentis auprès de ces artisans, perfectionner leur savoir-faire et apprendre des techniques traditionnelles tout en intégrant des concepts technologiques modernes. En exploitant les talents naturels des enfants doués de dextérité manuelle, les communautés peuvent créer des ateliers où de jeunes artisans produisent du matériel pédagogique en utilisant les ressources disponibles localement.</p>
+                        <p class="fs-5 mb-4">Du perlage complexe aux projets de menuiserie fonctionnelle, ces efforts suscitent un sentiment de fierté et d’appropriation dans les systèmes de connaissances autochtones. En favorisant une culture d'expérimentation et d'itération, les étudiants peuvent explorer diverses avenues dans le domaine de la technologie et des sciences sociales. Qu'il s'agisse de tester des hypothèses en physique ou de mener des recherches ethnographiques, les expériences pratiques permettent aux apprenants de relever des défis complexes et d'innover en solutions. En résumé, l’intersection de la technologie et de l’artisanat traditionnel offre aux enfants un terrain de jeu illimité où ils peuvent explorer, innover et apprendre.</p>
+                        <p class="fs-5 mb-4">Grâce à des efforts de collaboration et à l’exploitation des ressources locales, les communautés peuvent nourrir la prochaine génération de résolveurs de problèmes et de leaders d’opinion, transcendant les barrières et libérant un potentiel inexploité.</p>
+                        @* <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2> *@
+                    </section>
+                </article>
+                @* <!-- Comments section-->
+                <section>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <!-- Comment form-->
+                            <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                            <!-- Comment with nested comments-->
+                            <div class="d-flex mb-4">
+                                <!-- Parent comment-->
+                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                                    <!-- Child comment 1-->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">Commenter Name</div>
+                                            And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                                        </div>
+                                    </div>
+                                    <!-- Child comment 2-->
+                                    <div class="d-flex mt-4">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">Commenter Name</div>
+                                            When you put money directly to a problem, it makes a good headline.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single comment-->
+                            <div class="d-flex">
+                                <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                <div class="ms-3">
+                                    <div class="fw-bold">Commenter Name</div>
+                                    When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section> *@
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    protected override void OnInitialized()
+    {
+        Title = "Appareils Electroniques";
+    }
+}

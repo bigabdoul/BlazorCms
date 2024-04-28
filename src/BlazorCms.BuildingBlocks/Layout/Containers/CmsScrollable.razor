@@ -1,0 +1,37 @@
+﻿@inherits BlockComponentBase
+@{
+    var attrs = GetMaxHeight(out var height) 
+        ? GetAttributes(("style", $"max-height: {height}; overflow-y: auto;"), ("class", "cms-scrollable")) 
+        : null;
+}
+<div @attributes=@GetAllAttributes(attrs)>
+    @ChildContent
+</div>
+@code {
+    [Parameter] public string? MaxHeight { get; set; }
+
+    /// <summary>
+    /// Determines whether the <see cref="MaxHeight" /> property has a CSS style set.
+    /// It also ensures that the default unit (px) is appended if the property
+    /// is an integer.
+    /// </summary>
+    /// <param name="value">Returns the adjusted value of <see cref="MaxHeight" />.</param>
+    /// <returns><see langword="true"/> if the max-height is set; otherwise, <see langword="false"/>.</returns>
+    protected bool GetMaxHeight(out string? value)
+    {
+        if (IsNotBlank(MaxHeight))
+        {
+            value = MaxHeight;
+            // max-height should be a valid CSS unit; 
+            // if none has been specified, we assume it's in pixels
+            if (int.TryParse(value, out var result))
+            {
+                // set default
+                value = $"{value}px";
+            }
+            return true;
+        }
+        value = null;
+        return false;
+    }
+}

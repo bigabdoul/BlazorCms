@@ -1,0 +1,41 @@
+﻿@typeparam TValue
+@inherits BlockComponentBase
+
+@{
+    var id = GetId("cms-radio-");
+    var attrs = GetAttributes
+    (
+        ("class", "form-check-input".AddClass(Class)),
+        ("type", "radio"),
+        ("name", Parent?.Name ?? Name),
+        ("id", id),
+        ("value", Value),
+        ("checked", IsChecked)
+    );
+}
+<div class="form-check">
+    <input @attributes=attrs @onchange=HandleChanged>
+    <label class="form-check-label" for="@id">@(Title ?? Value?.ToString())</label>
+</div>
+
+@code {
+    [Parameter] public string Name { get; set; } = default!;
+    [Parameter] public bool? Checked { get; set; }
+    [Parameter] public TValue? Value { get; set; }
+    [Parameter] public EventCallback<TValue?> ValueChanged { get; set; }
+
+    [CascadingParameter] private CmsRadioGroup<TValue>? Parent { get; set; }
+
+    async Task HandleChanged(ChangeEventArgs e)
+    {
+        Value = e.Value.ChangeType<TValue>();
+
+        if (ValueChanged.HasDelegate)
+            await ValueChanged.InvokeAsync(Value);
+
+        if (Parent is not null)
+            await Parent.NotifyValueChanged(Value);
+    }
+
+    bool IsChecked => Checked ?? (Parent != null ? EqualityComparer<TValue>.Default.Equals(Parent.Value, Value) : false);
+}

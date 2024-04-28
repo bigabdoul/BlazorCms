@@ -1,0 +1,10 @@
+﻿@inherits BlockComponentBase
+<div @attributes=GetAllAttributes()>
+    @ChildContent
+</div>
+@code {
+    protected override IDictionary<string, object> DefaultAttributes => new Dictionary<string, object>()
+    {
+        { "class", "row" }
+    };
+}
